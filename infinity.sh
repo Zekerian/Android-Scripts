@@ -52,7 +52,7 @@ git clone https://github.com/tillua467/sm6150-common.git device/xiaomi/sm6150-co
 git clone https://github.com/aosp-phoenix/proprietary_vendor_xiaomi_phoenix.git vendor/xiaomi/phoenix
 git clone https://github.com/aosp-phoenix/proprietary_vendor_xiaomi_sm6150-common.git vendor/xiaomi/sm6150-common
 git clone https://github.com/rom-vayu/android_hardware_xiaomi.git hardware/xiaomi
-
+git clone https://gitlab.com/Shripal17/vendor_xiaomi_miuicamera vendor/xiaomi/miuicamera
 /opt/crave/resync.sh
 
 # Export
