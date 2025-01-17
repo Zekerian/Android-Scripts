@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# crave run --clean --no-patch -- "curl https://raw.githubusercontent.com/tillua467/Android-Scripts/refs/heads/main/script.sh | bash"
 # Upgrade System
 sudo apt update && sudo apt upgrade -y
 echo "========================================================================"
@@ -31,13 +31,13 @@ echo "===================================="
 echo "=============================================="
 echo "       Cloning Manifest..........."
 echo "=============================================="
-repo init --depth=1 --no-repo-verify --git-lfs -u https://github.com/ProjectInfinity-X/manifest -b 15 -g default,-mips,-darwin,-notdefault
+repo init -u https://github.com/Evolution-X/manifest -b vic --git-lfs
 echo "=============================================="
 echo "       Mniafest Cloned successfully"
 echo "=============================================="
 
 # Sync
-/opt/crave/resync.sh && repo sync -c --force-sync --optimized-fetch --no-tags --no-clone-bundle --prune -j$(nproc --all)
+/opt/crave/resync.sh && repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
 echo "============="
 echo " Sync success"
 echo "============="
@@ -71,7 +71,7 @@ echo "====== Envsetup Done ======="
 
 # Lunch
 echo "======Lunching....========"
-lunch infinity_phoenix-userdebug
+lunch lineage_phoenix-ap4a-userdebug
 echo "=====Lunching done========"
 
 # Make cleaninstall
@@ -80,7 +80,7 @@ echo "============="
 
 # Build rom
 echo "===================================="
-echo "        Build Infinty-X..."
+echo "        Build Evo-X..."
 echo "===================================="
-mka bacon
+m evolution
 
