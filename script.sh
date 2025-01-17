@@ -10,7 +10,6 @@ echo "========================================================================="
 echo "===================================="
 echo "     Removing Unnecessary Files"
 echo "===================================="
-rm -rf .repo/local_manifests
 rm -rf vendor/xiaomi
 rm -rf kernel/xiaomi
 rm -rf device/xiaomi
