@@ -1,12 +1,6 @@
 #!/bin/bash
 # crave run --clean --no-patch -- "curl https://raw.githubusercontent.com/tillua467/Android-Scripts/refs/heads/main/script.sh | bash"
 
-# Upgrade System
-sudo apt update && sudo apt upgrade -y || { echo "System upgrade failed"; exit 1; }
-echo "=================================================+======================="
-echo "                        SYSTEM UPGRADED"
-echo "========================================================================="
-
 # Remove Unnecessary Files
 echo "===================================="
 echo "     Removing Unnecessary Files"
