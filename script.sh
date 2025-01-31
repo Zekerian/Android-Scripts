@@ -53,11 +53,20 @@ echo "============="
 echo "=============================================="
 echo "       Cloning Trees..........."
 echo "=============================================="
-git clone https://github.com/tillua467/phoenix.git device/xiaomi/phoenix || { echo "Failed to clone device tree"; exit 1; }
-git clone https://github.com/shripal17/android_kernel_xiaomi_sm6150.git kernel/xiaomi/sm6150 || { echo "Failed to clone kernel"; exit 1; }
-git clone https://github.com/shripal17/android_vendor_xiaomi_phoenix.git vendor/xiaomi/phoenix || { echo "Failed to clone vendor phoenix"; exit 1; }
-git clone https://github.com/rom-vayu/android_hardware_xiaomi.git hardware/xiaomi || { echo "Failed to clone hardware"; exit 1; }
+git clone https://github.com/tillua467/phoenix-dt device/xiaomi/phoenix || { echo "Failed to clone device tree"; exit 1; }
+
+git clone https://github.com/aosp-phoenix/android_device_xiaomi_sm6150-common device/xiaomi/sm6150-common || { echo "Failed to clone common device tree"; exit 1; }
+
+git clone https://github.com/xiaomi-sm6150/android_kernel_xiaomi_sm6150 kernel/xiaomi/sm6150 || { echo "Failed to clone kernel"; exit 1; }
+
+git clone https://github.com/aosp-phoenix/proprietary_vendor_xiaomi_phoenix vendor/xiaomi/phoenix || { echo "Failed to clone vendor phoenix"; exit 1; }
+
+git clone https://github.com/aosp-phoenix/proprietary_vendor_xiaomi_sm6150-common vendor/xiaomi/sm6150-common || { echo "Failed to clone common vendor phoenix"; exit 1; }
+
+git clone https://github.com/Naruto-242/android_hardware_xiaomi.git -b lineage-22.1 hardware/xiaomi || { echo "Failed to clone hardware"; exit 1; }
+
 git clone https://gitlab.com/Shripal17/vendor_xiaomi_miuicamera vendor/xiaomi/miuicamera || { echo "Failed to clone MIUI Camera"; exit 1; }
+
 /opt/crave/resync.sh
 
 # Export Environment Variables
