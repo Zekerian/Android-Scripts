@@ -32,7 +32,7 @@ echo "===================================="
 echo "=============================================="
 echo "         Cloning Manifest..........."
 echo "=============================================="
-if ! repo init -u https://github.com/Evolution-X/manifest -b vic --git-lfs; then
+if ! repo init -u https://github.com/PixelOS-AOSP/manifest.git -b fifteen --git-lfs; then
   echo "Repo initialization failed. Exiting."
   exit 1
 fi
@@ -41,7 +41,7 @@ echo "       Manifest Cloned successfully"
 echo "=============================================="
 
 # Sync
-if ! /opt/crave/resync.sh || ! repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags; then
+if ! /opt/crave/resync.sh || ! repo sync; then
   echo "Repo sync failed. Exiting."
   exit 1
 fi
@@ -53,11 +53,11 @@ echo "============="
 echo "=============================================="
 echo "       Cloning Trees..........."
 echo "=============================================="
-git clone https://github.com/tillua467/phoenix-dt device/xiaomi/phoenix || { echo "Failed to clone device tree"; exit 1; }
+git clone https://github.com/tillua467/phoenix-dt -b pos-15 device/xiaomi/phoenix || { echo "Failed to clone device tree"; exit 1; }
 
 git clone https://github.com/aosp-phoenix/android_device_xiaomi_sm6150-common device/xiaomi/sm6150-common || { echo "Failed to clone common device tree"; exit 1; }
 
-git clone https://github.com/xiaomi-sm6150/android_kernel_xiaomi_sm6150 kernel/xiaomi/sm6150 || { echo "Failed to clone kernel"; exit 1; }
+git clone https://github.com/PixelOS-Devices/device_xiaomi_sm6150-common kernel/xiaomi/sm6150 || { echo "Failed to clone kernel"; exit 1; }
 
 git clone https://github.com/aosp-phoenix/proprietary_vendor_xiaomi_phoenix vendor/xiaomi/phoenix || { echo "Failed to clone vendor phoenix"; exit 1; }
 
@@ -85,15 +85,11 @@ echo "====== Envsetup Done ======="
 
 # Lunch
 echo "====== Lunching.... ========"
-lunch lineage_phoenix-ap4a-userdebug || { echo "Lunch command failed"; exit 1; }
+lunch aosp_phoenix-ap4a-userdebug || { echo "Lunch command failed"; exit 1; }
 echo "===== Lunching done ========"
-
-# Clean install
-make installclean || { echo "Installclean failed"; exit 1; }
-echo "============="
 
 # Build ROM
 echo "===================================="
-echo "        Build Evo-X..."
+echo "        Build Pixel..."
 echo "===================================="
-m evolution || { echo "Build failed"; exit 1; }
+mka bacon || { echo "Build failed"; exit 1; }
