@@ -55,7 +55,7 @@ echo "       Cloning Trees..........."
 echo "=============================================="
 git clone https://github.com/tillua467/phoenix-dt -b pos-15 device/xiaomi/phoenix || { echo "Failed to clone device tree"; exit 1; }
 
-git clone https://github.com/aosp-phoenix/android_device_xiaomi_sm6150-common device/xiaomi/sm6150-common || { echo "Failed to clone common device tree"; exit 1; }
+git clone https://github.com/tillua467/sm6150-common -b pos-15 device/xiaomi/sm6150-common || { echo "Failed to clone common device tree"; exit 1; }
 
 git clone https://github.com/PixelOS-Devices/device_xiaomi_sm6150-common kernel/xiaomi/sm6150 || { echo "Failed to clone kernel"; exit 1; }
 
