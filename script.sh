@@ -63,11 +63,16 @@ git clone https://github.com/aosp-phoenix/proprietary_vendor_xiaomi_phoenix vend
 
 git clone https://github.com/aosp-phoenix/proprietary_vendor_xiaomi_sm6150-common vendor/xiaomi/sm6150-common || { echo "Failed to clone common vendor phoenix"; exit 1; }
 
-git clone https://github.com/PixelOS-AOSP/hardware_xiaomi hardware/xiaomi || { echo "Failed to clone hardware"; exit 1; }
+git clone https://github.com/LineageOS/android_hardware_xiaomi hardware/xiaomi || { echo "Failed to clone hardware"; exit 1; }
 
 git clone https://gitlab.com/Shripal17/vendor_xiaomi_miuicamera vendor/xiaomi/miuicamera || { echo "Failed to clone MIUI Camera"; exit 1; }
 
 /opt/crave/resync.sh
+
+echo "Addiing stuff"
+rm -rf packages/apps/ParanoidSense
+git clone https://github.com/tillua467/packages_apps_ParanoidSense.git packages/apps/ParanoidSense || { echo "Failed to clone packages_apps_ParanoidSense"; exit 1; }
+echo "Done addiing"
 
 # Export Environment Variables
 echo "======= Exporting........ ======"
