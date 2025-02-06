@@ -32,7 +32,7 @@ echo "===================================="
 echo "=============================================="
 echo "         Cloning Manifest..........."
 echo "=============================================="
-if ! repo init --no-repo-verify --git-lfs -u https://github.com/ProjectInfinity-X/manifest -b 15 -g default,-mips,-darwin,-notdefault; then
+if ! repo init -u https://github.com/ProjectMatrixx/android.git -b 15.0 --git-lfs; then
   echo "Repo initialization failed. Exiting."
   exit 1
 fi
@@ -41,7 +41,7 @@ echo "       Manifest Cloned successfully"
 echo "=============================================="
 
 # Sync
-if ! /opt/crave/resync.sh || ! repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j$(nproc --all); then
+if ! /opt/crave/resync.sh || ! repo sync -c --no-clone-bundle --optimized-fetch --prune --force-sync -j$(nproc --all); then
   echo "Repo sync failed. Exiting."
   exit 1
 fi
@@ -57,8 +57,7 @@ echo "=================================="
 git clone https://github.com/tillua467/local_manifests .repo/local_manifests
 echo "=================================="
 echo "Local manifest cloned successfully"
-echo "==================================" vendor/xiaomi/miuicamera || { echo "Failed to clone MIUI Camera"; exit 1; }
-
+echo "=================================="
 /opt/crave/resync.sh
 
 # Export Environment Variables
@@ -75,16 +74,8 @@ echo "====== Starting Envsetup ======="
 source build/envsetup.sh || { echo "Envsetup failed"; exit 1; }
 echo "====== Envsetup Done ======="
 
-# Lunch
-echo "====== Lunching.... ========"
-lunch infinity_phoenix-userdebug
-lunch infinity_phoenix-ap2a-userdebug
-lunch infinity_phoenix-ap3a-userdebug
-lunch infinity_phoenix-ap4a-userdebug
-echo "===== Lunching done ========"
-
 # Build ROM
 echo "===================================="
-echo "        Build Infinity.."
+echo "        Build Matrixx.."
 echo "===================================="
-mka bacon || { echo "Build failed"; exit 1; }
+brunch phoenix || { echo "Build failed"; exit 1; }
