@@ -32,16 +32,15 @@ echo "===================================="
 echo "=============================================="
 echo "         Cloning Manifest..........."
 echo "=============================================="
-if ! repo init --depth=1 --no-repo-verify -u https://github.com/Lineage-OS-Special-Project/losp_manifests -b lineage-22.1 --git-lfs; then
+if ! repo init -u https://github.com/ProjectMatrixx/android.git -b 15.0 --git-lfs; then
   echo "Repo initialization failed. Exiting."
   exit 1
 fi
 echo "=============================================="
 echo "       Manifest Cloned successfully"
 echo "=============================================="
-
 # Sync
-if ! /opt/crave/resync.sh || ! repo --no-pager --color=always sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --optimized-fetch --prune; then
+if ! /opt/crave/resync.sh || ! repo sync -c --no-clone-bundle --optimized-fetch --prune --force-sync -j$(nproc --all); then
   echo "Repo sync failed. Exiting."
   exit 1
 fi
@@ -83,13 +82,9 @@ echo "====== Starting Envsetup ======="
 source build/envsetup.sh || { echo "Envsetup failed"; exit 1; }
 echo "====== Envsetup Done ======="
 
-# Lunch
-echo "====== Lunching.... ========"
-lunch lineage_phoenix-ap4a-userdebug || { echo "Lunch command failed"; exit 1; }
-echo "===== Lunching done ========"
 
 # Build ROM
 echo "===================================="
-echo "        Build losp.."
+echo "        Build Matrixx.."
 echo "===================================="
-m bacon || { echo "Build failed"; exit 1; }
+brunch phoenix || { echo "Build failed"; exit 1; }
