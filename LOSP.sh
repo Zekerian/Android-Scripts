@@ -1,5 +1,5 @@
 #!/bin/bash
-# crave run --clean --no-patch -- "curl https://raw.githubusercontent.com/tillua467/Android-Scripts/refs/heads/main/script.sh | bash"
+# crave run --clean --no-patch -- "curl https://raw.githubusercontent.com/tillua467/Android-Scripts/refs/heads/main/LOSP.sh | bash"
 
 # Remove Unnecessary Files
 echo "===================================="
@@ -56,7 +56,7 @@ git clone https://github.com/tillua467/phoenix-dt -b los-22.1 device/xiaomi/phoe
 
 git clone https://github.com/aosp-phoenix/android_device_xiaomi_sm6150-common device/xiaomi/sm6150-common || { echo "Failed to clone common device tree"; exit 1; }
 
-git clone https://github.com/shripal17/android_kernel_xiaomi_sm6150 kernel/xiaomi/sm6150 || { echo "Failed to clone kernel"; exit 1; }
+git clone https://github.com/xiaomi-sm6150/android_kernel_xiaomi_sm6150.git kernel/xiaomi/sm6150 || { echo "Failed to clone kernel"; exit 1; }
 
 git clone https://github.com/aosp-phoenix/proprietary_vendor_xiaomi_phoenix vendor/xiaomi/phoenix || { echo "Failed to clone vendor phoenix"; exit 1; }
 
