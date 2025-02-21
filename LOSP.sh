@@ -1,5 +1,5 @@
 #!/bin/bash
-# crave run --clean --no-patch -- "curl https://raw.githubusercontent.com/tillua467/Android-Scripts/refs/heads/main/LOSP.sh | bash"
+# crave run --no-patch -- "curl https://raw.githubusercontent.com/tillua467/Android-Scripts/refs/heads/main/LOSP.sh | bash"
 
 # Remove Unnecessary Files
 echo "===================================="
@@ -32,7 +32,7 @@ echo "===================================="
 echo "=============================================="
 echo "         Cloning Manifest..........."
 echo "=============================================="
-if ! repo init -u https://github.com/ProjectMatrixx/android.git -b 15.0 --git-lfs; then
+if ! repo init --no-repo-verify --git-lfs -u https://github.com/ProjectInfinity-X/manifest -b 15 -g default,-mips,-darwin,-notdefault; then
   echo "Repo initialization failed. Exiting."
   exit 1
 fi
@@ -40,7 +40,7 @@ echo "=============================================="
 echo "       Manifest Cloned successfully"
 echo "=============================================="
 # Sync
-if ! /opt/crave/resync.sh || ! repo sync -c --no-clone-bundle --optimized-fetch --prune --force-sync -j$(nproc --all); then
+if ! /opt/crave/resync.sh || ! repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j$(nproc --all); then
   echo "Repo sync failed. Exiting."
   exit 1
 fi
@@ -68,6 +68,10 @@ git clone https://gitlab.com/Shripal17/vendor_xiaomi_miuicamera vendor/xiaomi/mi
 
 /opt/crave/resync.sh
 
+ # clone
+rm -rf vendor/infinity
+git clone https://github.com/Gtajisan/vendor_infinity -b 15 vendor/infinity
+
 # Export Environment Variables
 echo "======= Exporting........ ======"
 export BUILD_USERNAME=tillua467
@@ -85,6 +89,6 @@ echo "====== Envsetup Done ======="
 
 # Build ROM
 echo "===================================="
-echo "        Build Matrixx.."
+echo "        Build Infinity.."
 echo "===================================="
 brunch phoenix || { echo "Build failed"; exit 1; }
