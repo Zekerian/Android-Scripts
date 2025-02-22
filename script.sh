@@ -32,7 +32,7 @@ echo "===================================="
 echo "=============================================="
 echo "         Cloning Manifest..........."
 echo "=============================================="
-if ! repo init -u https://github.com/ProjectMatrixx/android.git -b 15.0 --git-lfs; then
+if ! repo init --no-repo-verify --git-lfs -u https://github.com/ProjectInfinity-X/manifest -b 15 -g default,-mips,-darwin,-notdefault; then
   echo "Repo initialization failed. Exiting."
   exit 1
 fi
@@ -49,6 +49,8 @@ echo "============="
 echo " Sync success"
 echo "============="
 
+rm -rf hardware/xiaomi
+
 # Clone device trees and other dependencies
 # Local manifests
 echo "=================================="
@@ -59,6 +61,11 @@ echo "=================================="
 echo "Local manifest cloned successfully"
 echo "=================================="
 /opt/crave/resync.sh
+
+ # clone
+rm -rf vendor/infinity
+git clone https://github.com/Gtajisan/vendor_infinity -b 15 vendor/infinity
+/opt/crave/resync.sh 
 
 # Export Environment Variables
 echo "======= Exporting........ ======"
@@ -76,6 +83,7 @@ echo "====== Envsetup Done ======="
 
 # Build ROM
 echo "===================================="
-echo "        Build Matrixx.."
+echo "        Build Infinity.."
 echo "===================================="
-brunch phoenix || { echo "Build failed"; exit 1; }
+brunch phoenix || lunch infinity_phoenix-userdebug && mka bacon || lunch infinity_phoenix-ap2a-userdebug && mka bacon { echo "Build failed"; exit 1; }
+
