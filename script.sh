@@ -85,5 +85,5 @@ echo "====== Envsetup Done ======="
 echo "===================================="
 echo "        Build Infinity.."
 echo "===================================="
-brunch phoenix || lunch infinity_phoenix-userdebug && mka bacon || lunch infinity_phoenix-ap2a-userdebug && mka bacon { echo "Build failed"; exit 1; }
+brunch phoenix || lunch infinity_phoenix-userdebug && mka bacon || lunch infinity_phoenix-ap2a-userdebug && mka bacon || { echo "Build failed"; exit 1; }
 
