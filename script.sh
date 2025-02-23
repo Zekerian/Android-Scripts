@@ -32,7 +32,7 @@ echo "===================================="
 echo "=============================================="
 echo "         Cloning Manifest..........."
 echo "=============================================="
-if ! repo init --no-repo-verify --git-lfs -u https://github.com/ProjectInfinity-X/manifest -b 15 -g default,-mips,-darwin,-notdefault; then
+if ! repo init --depth=1 --no-repo-verify --git-lfs -u https://github.com/ProjectInfinity-X/manifest -b 15 -g default,-mips,-darwin,-notdefault; then
   echo "Repo initialization failed. Exiting."
   exit 1
 fi
@@ -41,7 +41,7 @@ echo "       Manifest Cloned successfully"
 echo "=============================================="
 
 # Sync
-if ! /opt/crave/resync.sh || ! repo sync -c --no-clone-bundle --optimized-fetch --prune --force-sync -j$(nproc --all); then
+if ! /opt/crave/resync.sh || ! repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j$(nproc --all); then
   echo "Repo sync failed. Exiting."
   exit 1
 fi
