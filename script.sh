@@ -56,7 +56,8 @@ rm -rf hardware/xiaomi
 echo "=================================="
 echo "Cloning Local manifest............"
 echo "=================================="
-git clone https://github.com/tillua467/local_manifests .repo/local_manifests
+repo init --no-repo-verify https://github.com/tillua467/local_manifests .repo/local_manifests
+repo sync -c
 echo "=================================="
 echo "Local manifest cloned successfully"
 echo "=================================="
