@@ -32,7 +32,7 @@ echo "===================================="
 echo "=============================================="
 echo "         Cloning Manifest..........."
 echo "=============================================="
-if ! repo init --depth=1 --no-repo-verify --git-lfs -u https://github.com/ProjectInfinity-X/manifest -b 15 -g default,-mips,-darwin,-notdefault; then
+if ! repo init -u https://github.com/AxionAOSP/android.git -b lineage-22.1 --git-lfs; then
   echo "Repo initialization failed. Exiting."
   exit 1
 fi
@@ -41,7 +41,7 @@ echo "       Manifest Cloned successfully"
 echo "=============================================="
 
 # Sync
-if ! /opt/crave/resync.sh || ! repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j$(nproc --all); then
+if ! repo sync || ! /opt/crave/resync.sh; then
   echo "Repo sync failed. Exiting."
   exit 1
 fi
@@ -63,11 +63,6 @@ echo "Local manifest cloned successfully"
 echo "=================================="
 /opt/crave/resync.sh
 
- # clone
-rm -rf vendor/infinity
-git clone https://github.com/Gtajisan/vendor_infinity -b 15 vendor/infinity
-/opt/crave/resync.sh 
-
 # Export Environment Variables
 echo "======= Exporting........ ======"
 export BUILD_USERNAME=tillua467
@@ -84,7 +79,10 @@ echo "====== Envsetup Done ======="
 
 # Build ROM
 echo "===================================="
-echo "        Build Infinity.."
+echo "        Build axion.."
 echo "===================================="
-lunch infinity_phoenix-userdebug && mka bacon || lunch infinity_phoenix-ap3a-userdebug && mka bacon ||  lunch infinity_phoenix-ap4a-userdebug && mka bacon || { echo "Build failed"; exit 1; }
+gk -s
+axion phoenix gms core
+axionSync
+ax -j16
 
