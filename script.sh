@@ -41,7 +41,7 @@ echo "       Manifest Cloned successfully"
 echo "=============================================="
 
 # Sync
-if ! repo sync || ! /opt/crave/resync.sh; then
+if ! /opt/crave/resync.sh || ! repo sync ; then
   echo "Repo sync failed. Exiting."
   exit 1
 fi
@@ -57,7 +57,6 @@ echo "=================================="
 echo "Cloning Local manifest............"
 echo "=================================="
 repo init --no-repo-verify https://github.com/tillua467/local_manifests .repo/local_manifests
-repo sync -c
 echo "=================================="
 echo "Local manifest cloned successfully"
 echo "=================================="
