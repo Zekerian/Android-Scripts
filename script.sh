@@ -81,4 +81,4 @@ echo "===================================="
 echo "        Build axion.."
 echo "===================================="
 # Lunch
-lunch lineage_phoenix-ap4a-userdebug && axion phoenix userdebug && axion phoenix gms core && brunch phoenix|| axion phoenix userdebug && axion phoenix gms core && brunch phoenix
+lunch lineage_phoenix-ap4a-userdebug && axion phoenix userdebug && axion phoenix gms core && brunch phoenix || axion phoenix userdebug && axion phoenix gms core && brunch phoenix
