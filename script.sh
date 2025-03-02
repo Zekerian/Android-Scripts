@@ -80,5 +80,4 @@ echo "====== Envsetup Done ======="
 echo "===================================="
 echo "        Build axion.."
 echo "===================================="
-# Lunch
-brunch phoenix
+breakfast phoenix userdebug && brunch phoenix userdebug
