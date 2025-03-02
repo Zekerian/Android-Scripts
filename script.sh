@@ -81,10 +81,4 @@ echo "===================================="
 echo "        Build axion.."
 echo "===================================="
 # Lunch
-lunch lineage_phoenix-userdebug || lunch lineage_phoenix-ap3a-userdebug || lunch lineage_phoenix-ap2a-userdebug
-echo "============="
-
-# Make cleaninstall
-axion phoenix userdebug
-axion phoenix gms core
-brunch phoenix
+lunch lineage_phoenix-ap4a-userdebug || axion phoenix userdebug && axion phoenix gms core && brunch phoenix
