@@ -90,10 +90,8 @@ echo "===================================="
 echo "        Build Axion.."
 echo "===================================="
 . build/envsetup.sh
-# Lunch
 lunch lineage_phoenix-ap3a-userdebug || lunch lineage_phoenix-ap2a-userdebug || lunch lineage_phoenix-ap4a-userdebug
-
-# Make cleaninstall
+make installclean
 axion phoenix userdebug
 axion phoenix gms pico
 brunch phoenix
