@@ -68,6 +68,10 @@ git clone https://github.com/basamaryan/android_hardware_xiaomi -b lineage-22.1 
 
 git clone https://gitlab.com/Shripal17/vendor_xiaomi_miuicamera vendor/xiaomi/miuicamera || { echo "Failed to clone MIUI Camera"; exit 1; }
 
+rm -rf packages/apps/ParanoidSense
+
+git clone https://github.com/tillua467/packages_apps_ParanoidSense packages/apps/ParanoidSense || { echo "Failed to clone Paranoid"; exit 1; }
+
 /opt/crave/resync.sh
 
 # Export Environment Variables
