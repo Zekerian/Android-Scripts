@@ -32,7 +32,7 @@ echo "===================================="
 echo "=============================================="
 echo "         Cloning Manifest..........."
 echo "=============================================="
-if ! repo init -u https://github.com/AxionAOSP/android.git -b lineage-22.1 --git-lfs; then
+if ! repo init -u https://github.com/PixelOS-AOSP/manifest.git -b fifteen --git-lfs; then
   echo "Repo initialization failed. Exiting."
   exit 1
 fi
@@ -52,19 +52,19 @@ echo "============="
 echo "=============================================="
 echo "       Cloning Trees..........."
 echo "=============================================="
-git clone https://github.com/tillua467/phoenix-dt -b los-22.1 device/xiaomi/phoenix || { echo "Failed to clone device tree"; exit 1; }
+git clone https://github.com/tillua467/phoenix-dt -b pos-15 device/xiaomi/phoenix || { echo "Failed to clone device tree"; exit 1; }
 
-git clone https://github.com/tillua467/sm6150-common -b los-22.1 device/xiaomi/sm6150-common || { echo "Failed to clone common device tree"; exit 1; }
+git clone https://github.com/tillua467/sm6150-common -b pos-15 device/xiaomi/sm6150-common || { echo "Failed to clone common device tree"; exit 1; }
 
 git clone https://github.com/tillua467/android_kernel_xiaomi_sm6150 kernel/xiaomi/sm6150 || { echo "Failed to clone kernel"; exit 1; }
 
-git clone https://github.com/aosp-phoenix/proprietary_vendor_xiaomi_phoenix vendor/xiaomi/phoenix || { echo "Failed to clone vendor phoenix"; exit 1; }
+git clone https://github.com/tillua467/proprietary_vendor_xiaomi_phoenix vendor/xiaomi/phoenix || { echo "Failed to clone vendor phoenix"; exit 1; }
 
 git clone https://github.com/aosp-phoenix/proprietary_vendor_xiaomi_sm6150-common vendor/xiaomi/sm6150-common || { echo "Failed to clone common vendor phoenix"; exit 1; }
 
 rm -rf hardware/xiaomi
 
-git clone https://github.com/LineageOS/android_hardware_xiaomi hardware/xiaomi || { echo "Failed to clone hardware"; exit 1; }
+git clone https://github.com/basamaryan/android_hardware_xiaomi -b lineage-22.1 hardware/xiaomi || { echo "Failed to clone hardware"; exit 1; }
 
 git clone https://gitlab.com/Shripal17/vendor_xiaomi_miuicamera vendor/xiaomi/miuicamera || { echo "Failed to clone MIUI Camera"; exit 1; }
 
@@ -87,11 +87,8 @@ echo "====== Envsetup Done ======="
 
 # Build ROM
 echo "===================================="
-echo "        Build Axion.."
+echo "        Build POS.."
 echo "===================================="
 . build/envsetup.sh
-lunch lineage_phoenix-ap3a-userdebug || lunch lineage_phoenix-ap2a-userdebug || lunch lineage_phoenix-ap4a-userdebug
-make installclean
-axion phoenix userdebug
-axion phoenix gms pico
-brunch phoenix
+lunch aosp_phoenix-ap4a-userdebug
+mka bacon
