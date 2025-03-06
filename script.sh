@@ -64,13 +64,9 @@ git clone https://github.com/aosp-phoenix/proprietary_vendor_xiaomi_sm6150-commo
 
 rm -rf hardware/xiaomi
 
-git clone https://github.com/basamaryan/android_hardware_xiaomi -b lineage-22.1 hardware/xiaomi || { echo "Failed to clone hardware"; exit 1; }
+git clone https://github.com/tillua467/android_hardware_xiaomi -b lineage-22.1 hardware/xiaomi || { echo "Failed to clone hardware"; exit 1; }
 
-git clone https://gitlab.com/Shripal17/vendor_xiaomi_miuicamera vendor/xiaomi/miuicamera || { echo "Failed to clone MIUI Camera"; exit 1; }
-
-rm -rf packages/apps/ParanoidSense
-
-git clone https://github.com/tillua467/packages_apps_ParanoidSense packages/apps/ParanoidSense || { echo "Failed to clone Paranoid"; exit 1; }
+git clone https://github.com/tillua467/vendor_xiaomi_miuicamera-phoenix vendor/xiaomi/miuicamera || { echo "Failed to clone MIUI Camera"; exit 1; }
 
 /opt/crave/resync.sh
 
