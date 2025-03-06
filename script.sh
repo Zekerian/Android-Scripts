@@ -66,7 +66,7 @@ rm -rf hardware/xiaomi
 
 git clone https://github.com/tillua467/android_hardware_xiaomi -b lineage-22.1 hardware/xiaomi || { echo "Failed to clone hardware"; exit 1; }
 
-git clone https://github.com/tillua467/vendor_xiaomi_miuicamera-phoenix vendor/xiaomi/miuicamera || { echo "Failed to clone MIUI Camera"; exit 1; }
+git clone https://gitlab.com/Shripal17/vendor_xiaomi_miuicamera vendor/xiaomi/miuicamera || { echo "Failed to clone MIUI Camera"; exit 1; }
 
 /opt/crave/resync.sh
 
