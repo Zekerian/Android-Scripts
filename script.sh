@@ -70,6 +70,8 @@ git clone https://gitlab.com/Shripal17/vendor_xiaomi_miuicamera vendor/xiaomi/mi
 
 /opt/crave/resync.sh
 
+rm -rf hardware/xiaomi/megvii
+
 # Export Environment Variables
 echo "======= Exporting........ ======"
 export BUILD_USERNAME=tillua467
