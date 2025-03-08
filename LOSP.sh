@@ -65,7 +65,7 @@ git clone https://github.com/Motorola-Miami/proprietary_vendor_motorola_sm6375-c
 
 git clone https://github.com/Motorola-Miami/android_hardware_motorola hardware/motorola || { echo "Failed to clone hardware"; exit 1; }
 
-git clone https://gitlab.com/kutemeikito/rastamod69-clang.git prebuilts/clang/host/linux-x86/clang-rastamod || { echo "Failed to clone prebuilts clang-rastamod"; exit 1; }
+git clone https://gitlab.com/kutemeikito/rastamod69-clang prebuilts/clang/host/linux-x86/clang-rastamod || { echo "Failed to clone prebuilts clang-rastamod"; exit 1; }
 
 # croot && git clone https://github.com/ProjectInfinity-X/vendor_infinity-priv_keys-template vendor/infinity-priv/keys || { echo "Failed to sign"; exit 1;}
 
