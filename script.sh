@@ -25,11 +25,11 @@ MIUICAMERA_DIR="vendor/xiaomi/miuicamera"
 repos=(
     "$DT_DIR https://github.com/tillua467/phoenix-dt pos-15"
     "$CDT_DIR https://github.com/tillua467/sm6150-common pos-15"
-    "$KERNEL_DIR https://github.com/Rom-Build-sys/android_kernel_xiaomi_sm6150 main"
-    "$VENDOR_DIR https://github.com/tillua467/proprietary_vendor_xiaomi_phoenix main"
-    "$COMMON_VENDOR_DIR https://github.com/aosp-phoenix/proprietary_vendor_xiaomi_sm6150-common main"
+    "$KERNEL_DIR https://github.com/Rom-Build-sys/android_kernel_xiaomi_sm6150 lineage-22.1"
+    "$VENDOR_DIR https://github.com/tillua467/proprietary_vendor_xiaomi_phoenix lineage-22.1"
+    "$COMMON_VENDOR_DIR https://github.com/aosp-phoenix/proprietary_vendor_xiaomi_sm6150-common lineage-22.1"
     "$HARDWARE_XIAOMI_DIR https://github.com/tillua467/android_hardware_xiaomi lineage-22.1"
-    "$MIUICAMERA_DIR https://gitlab.com/Shripal17/vendor_xiaomi_miuicamera main"
+    "$MIUICAMERA_DIR https://gitlab.com/Shripal17/vendor_xiaomi_miuicamera fifteen-leica"
 )
 
 # ======= DEPENDENCY CHECK =======
