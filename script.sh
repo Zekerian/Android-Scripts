@@ -40,7 +40,7 @@ echo "=============================================="
 echo "       Manifest Cloned successfully"
 echo "=============================================="
 # Sync
-if ! /opt/crave/resync.sh || ! repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j$(nproc --all); then
+if ! /opt/crave/resync.sh || ! repo sync; then
   echo "Repo sync failed. Exiting."
   exit 1
 fi
