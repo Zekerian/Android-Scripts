@@ -1,5 +1,5 @@
 #!/bin/bash
-# crave run --no-patch -- "curl https://raw.githubusercontent.com/tillua467/Android-Scripts/refs/heads/main/LOSP.sh | bash"
+# crave run --no-patch -- "curl https://raw.githubusercontent.com/Zekerian/Android-Scripts/refs/heads/InfinityX/LOSP.sh | bash"
 
 # Remove Unnecessary Files
 echo "===================================="
@@ -7,12 +7,12 @@ echo "     Removing Unnecessary Files"
 echo "===================================="
 
 dirs_to_remove=(
-  "vendor/xiaomi"
-  "kernel/xiaomi"
-  "device/xiaomi"
-  "device/xiaomi/sm6150-common"
-  "vendor/xiaomi/sm6150-common"
-  "hardware/xiaomi"
+  "vendor/motorola"
+  "kernel/motorola"
+  "device/motorola"
+  "device/motorola/sm6375-common"
+  "vendor/motorola/sm6375-common"
+  "hardware/motorola"
   "out/target/product/*/*zip"
   "out/target/product/*/*txt"
   "out/target/product/*/boot.img"
@@ -26,6 +26,13 @@ done
 
 echo "===================================="
 echo "  Removing Unnecessary Files Done"
+echo "===================================="
+
+# Removing local manifest
+rm -rf .repo/local_manifests/
+
+echo "===================================="
+echo "  Removing local manifest Done"
 echo "===================================="
 
 # Initialize repo
@@ -52,29 +59,31 @@ echo "============="
 echo "=============================================="
 echo "       Cloning Trees..........."
 echo "=============================================="
-git clone https://github.com/tillua467/phoenix-dt -b los-22.1 device/xiaomi/phoenix || { echo "Failed to clone device tree"; exit 1; }
+git clone https://github.com/Zekerian/android_device_motorola_miami device/motorola/miami || { echo "Failed to clone device tree"; exit 1; }
 
-git clone https://github.com/tillua467/sm6150-common -b los-22.1 device/xiaomi/sm6150-common || { echo "Failed to clone common device tree"; exit 1; }
+git clone https://github.com/Zekerian/android_device_motorola_sm6375-common device/motorola/sm6375-common || { echo "Failed to clone common device tree"; exit 1; }
 
-git clone https://github.com/tillua467/android_kernel_xiaomi_sm6150 kernel/xiaomi/sm6150 || { echo "Failed to clone kernel"; exit 1; }
+git clone https://github.com/Motorola-Miami/android_kernel_motorola_sm6375 kernel/motorola/sm6375 || { echo "Failed to clone kernel"; exit 1; }
 
-git clone https://github.com/aosp-phoenix/proprietary_vendor_xiaomi_phoenix vendor/xiaomi/phoenix || { echo "Failed to clone vendor phoenix"; exit 1; }
+git clone https://gitlab.com/Motorola-Miami/proprietary_vendor_motorola_miami vendor/motorola/miami || { echo "Failed to clone vendor miami"; exit 1; }
 
-git clone https://github.com/aosp-phoenix/proprietary_vendor_xiaomi_sm6150-common vendor/xiaomi/sm6150-common || { echo "Failed to clone common vendor phoenix"; exit 1; }
+git clone https://github.com/Motorola-Miami/proprietary_vendor_motorola_sm6375-common vendor/Motorola/sm6375-common || { echo "Failed to clone common vendor miami"; exit 1; }
 
-git clone https://github.com/LineageOS/android_hardware_xiaomi hardware/xiaomi || { echo "Failed to clone hardware"; exit 1; }
+git clone https://github.com/Motorola-Miami/android_hardware_motorola hardware/motorola || { echo "Failed to clone hardware"; exit 1; }
 
-git clone https://gitlab.com/Shripal17/vendor_xiaomi_miuicamera vendor/xiaomi/miuicamera || { echo "Failed to clone MIUI Camera"; exit 1; }
+git clone https://gitlab.com/kutemeikito/rastamod69-clang.git prebuilts/clang/host/linux-x86/clang-rastamod || { echo "Failed to clone prebuilts clang-rastamod"; exit 1; }
+
+# croot && git clone https://github.com/ProjectInfinity-X/vendor_infinity-priv_keys-template vendor/infinity-priv/keys || { echo "Failed to sign"; exit 1;}
+
+# cd vendor/infinity-priv/keys && chmod +x keys.sh
+
+# ./keys.sh && cd ../../../
 
 /opt/crave/resync.sh
 
- # clone
-rm -rf vendor/infinity
-git clone https://github.com/Gtajisan/vendor_infinity -b 15 vendor/infinity
-
 # Export Environment Variables
 echo "======= Exporting........ ======"
-export BUILD_USERNAME=tillua467
+export BUILD_USERNAME=Zeke
 export BUILD_HOSTNAME=crave
 export TARGET_DISABLE_EPPE=true
 export TZ=Asia/Dhaka
@@ -91,4 +100,6 @@ echo "====== Envsetup Done ======="
 echo "===================================="
 echo "        Build Infinity.."
 echo "===================================="
-brunch phoenix || { echo "Build failed"; exit 1; }
+. build/envsetup.sh
+lunch infinity_miami-userdebug
+mka bacon
