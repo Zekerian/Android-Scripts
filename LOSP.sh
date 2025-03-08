@@ -18,6 +18,7 @@ dirs_to_remove=(
   "out/target/product/*/boot.img"
   "out/target/product/*/recovery.img"
   "out/target/product/*/super*img"
+  "rm -rf .repo/local_manifests/"
 )
 
 for dir in "${dirs_to_remove[@]}"; do
@@ -26,13 +27,6 @@ done
 
 echo "===================================="
 echo "  Removing Unnecessary Files Done"
-echo "===================================="
-
-# Removing local manifest
-rm -rf .repo/local_manifests/
-
-echo "===================================="
-echo "  Removing local manifest Done"
 echo "===================================="
 
 # Initialize repo
@@ -100,6 +94,5 @@ echo "====== Envsetup Done ======="
 echo "===================================="
 echo "        Build Infinity.."
 echo "===================================="
-. build/envsetup.sh
 lunch infinity_miami-userdebug
 mka bacon
