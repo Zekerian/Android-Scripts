@@ -14,6 +14,7 @@ dirs_to_remove=(
   "device/motorola/sm6375-common"
   "vendor/motorola/sm6375-common"
   "hardware/motorola"
+  "prebuilts/clang/host/linux-x86/clang-rastamod"
   "out/target/product/*/*zip"
   "out/target/product/*/*txt"
   "out/target/product/*/boot.img"
