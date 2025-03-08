@@ -18,7 +18,7 @@ dirs_to_remove=(
   "out/target/product/*/boot.img"
   "out/target/product/*/recovery.img"
   "out/target/product/*/super*img"
-  "rm -rf .repo/local_manifests/"
+  ".repo/local_manifests/"
 )
 
 for dir in "${dirs_to_remove[@]}"; do
