@@ -6,8 +6,8 @@ manifest_url="https://github.com/PixelOS-AOSP/manifest.git" # The rom you wanna 
 manifest_branch="fifteen" # The branch
 
 device_codename="phoenix"  # Example: miatoll, phoenix, surya
-lunch_prefix="aosp"  # Example: aosp, lineage
-device_soc="sm6150" # Example: sm6150
+lunch_prefix="aosp"        # Example: aosp, lineage
+device_soc="sm6150"        # Example: sm6150
 
 # Define build command
 build_code="mka bacon -j$(nproc)"
@@ -34,7 +34,7 @@ repos=(
 
 # ======= DEPENDENCY CHECK =======
 echo "Checking required tools..."
-for cmd in repo git bash rm; do
+for cmd in repo git bash rm curl; do
     if ! command -v $cmd &>/dev/null; then
         echo "Error: '$cmd' is missing. Install it before running the script."
         exit 1
@@ -57,11 +57,11 @@ dirs_to_remove=(
 )
 
 files_to_remove=(
-    "out/target/product/*/*.zip"
-    "out/target/product/*/*.txt"
-    "out/target/product/*/boot.img"
-    "out/target/product/*/recovery.img"
-    "out/target/product/*/super*img"
+    "out/target/product/${device_codename}/*.zip"
+    "out/target/product/${device_codename}/*.txt"
+    "out/target/product/${device_codename}/boot.img"
+    "out/target/product/${device_codename}/recovery.img"
+    "out/target/product/${device_codename}/super*img"
 )
 
 for dir in "${dirs_to_remove[@]}"; do
@@ -142,7 +142,7 @@ LUNCH_OPTIONS=(
 success=false
 for CMD in "${LUNCH_OPTIONS[@]}"; do
     echo "Trying: $CMD"
-    if $CMD; then
+    if eval "$CMD"; then
         success=true
         break
     fi
@@ -159,7 +159,46 @@ fi
 if [ "$success" = true ]; then
     echo "Lunch/Breakfast successful, running build command: $build_code"
     $build_code
+    BUILD_STATUS=$?
+    if [ $BUILD_STATUS -eq 0 ]; then
+        echo "Build completed successfully!"
+    else
+        echo "Build failed! Fetching error.log..."
+        find out/target/product/${device_codename} -name "error.log" -exec cat {} \;
+        exit 1
+    fi
 else
-    echo "All attempts failed, exiting."
+    echo "All attempts to select a build target failed, exiting."
+    exit 1
+fi
+
+# ======= UPLOAD TO GOFILE.IO (only if build succeeded) =======
+echo "=============================================="
+echo "      Searching for the built ROM..."
+echo "=============================================="
+
+ROM_FILE=$(find out/target/product/${device_codename} -name "*.zip" -type f | sort -r | head -n 1)
+
+if [[ -z "$ROM_FILE" ]]; then
+    echo "Error: No ROM zip file found in out/target/product/${device_codename}"
+    exit 1
+fi
+
+echo "Found ROM: $ROM_FILE"
+
+echo "=============================================="
+echo "     Uploading ROM to Gofile.io..."
+echo "=============================================="
+
+UPLOAD_RESPONSE=$(curl -s -F "file=@$ROM_FILE" "https://store7.gofile.io/uploadFile")
+DOWNLOAD_LINK=$(echo "$UPLOAD_RESPONSE" | grep -o '"downloadPage":"[^"]*' | cut -d '"' -f4)
+
+if [[ -n "$DOWNLOAD_LINK" ]]; then
+    echo "=============================================="
+    echo "        Upload Successful!"
+    echo "Download Link: $DOWNLOAD_LINK"
+    echo "=============================================="
+else
+    echo "Error: Upload failed!"
     exit 1
 fi
