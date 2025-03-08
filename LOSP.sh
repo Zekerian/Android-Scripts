@@ -8,6 +8,7 @@ echo "===================================="
 
 dirs_to_remove=(
   "vendor/motorola"
+  "vendor/Motorola"
   "kernel/motorola"
   "device/motorola"
   "device/motorola/sm6375-common"
@@ -53,15 +54,15 @@ echo "============="
 echo "=============================================="
 echo "       Cloning Trees..........."
 echo "=============================================="
-git clone https://github.com/Zekerian/android_device_motorola_miami device/motorola/miami || { echo "Failed to clone device tree"; exit 1; }
+git clone https://github.com/Zekerian/android_device_motorola_miami -b InfinityX device/motorola/miami || { echo "Failed to clone device tree"; exit 1; }
 
-git clone https://github.com/Zekerian/android_device_motorola_sm6375-common device/motorola/sm6375-common || { echo "Failed to clone common device tree"; exit 1; }
+git clone https://github.com/Zekerian/android_device_motorola_sm6375-common -b InfinityX device/motorola/sm6375-common || { echo "Failed to clone common device tree"; exit 1; }
 
 git clone https://github.com/Motorola-Miami/android_kernel_motorola_sm6375 kernel/motorola/sm6375 || { echo "Failed to clone kernel"; exit 1; }
 
 git clone https://gitlab.com/Motorola-Miami/proprietary_vendor_motorola_miami vendor/motorola/miami || { echo "Failed to clone vendor miami"; exit 1; }
 
-git clone https://github.com/Motorola-Miami/proprietary_vendor_motorola_sm6375-common vendor/Motorola/sm6375-common || { echo "Failed to clone common vendor miami"; exit 1; }
+git clone https://github.com/Motorola-Miami/proprietary_vendor_motorola_sm6375-common vendor/motorola/sm6375-common || { echo "Failed to clone common vendor miami"; exit 1; }
 
 git clone https://github.com/Motorola-Miami/android_hardware_motorola hardware/motorola || { echo "Failed to clone hardware"; exit 1; }
 
