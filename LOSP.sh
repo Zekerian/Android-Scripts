@@ -8,7 +8,6 @@ echo "===================================="
 
 dirs_to_remove=(
   "vendor/motorola"
-  "vendor/Motorola"
   "kernel/motorola"
   "device/motorola"
   "device/motorola/sm6375-common"
