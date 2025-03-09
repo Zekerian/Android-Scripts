@@ -97,3 +97,34 @@ echo "        Build Infinity.."
 echo "===================================="
 lunch infinity_miami-userdebug
 mka bacon
+
+# ======= UPLOAD TO GOFILE.IO (only if build succeeded) =======
+echo "=============================================="
+echo "      Searching for the built ROM..."
+echo "=============================================="
+
+ROM_FILE=$(find out/target/product/miami -name "*.zip" -type f | sort -r | head -n 1)
+
+if [[ -z "$ROM_FILE" ]]; then
+    echo "Error: No ROM zip file found in out/target/product/miami"
+    exit 1
+fi
+
+echo "Found ROM: $ROM_FILE"
+
+echo "=============================================="
+echo "     Uploading ROM to Gofile.io..."
+echo "=============================================="
+
+UPLOAD_RESPONSE=$(curl -s -F "file=@$ROM_FILE" "https://store7.gofile.io/uploadFile")
+DOWNLOAD_LINK=$(echo "$UPLOAD_RESPONSE" | grep -o '"downloadPage":"[^"]*' | cut -d '"' -f4)
+
+if [[ -n "$DOWNLOAD_LINK" ]]; then
+    echo "=============================================="
+    echo "        Upload Successful!"
+    echo "Download Link: $DOWNLOAD_LINK"
+    echo "=============================================="
+else
+    echo "Error: Upload failed!"
+    exit 1
+fi
