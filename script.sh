@@ -177,7 +177,8 @@ echo "=============================================="
 echo "      Searching for the built ROM..."
 echo "=============================================="
 
-ROM_FILE=$(find out/target/product/${device_codename} -name "*.zip" -type f | sort -r | head -n 1)
+# Use `ls -t` to get the latest built ROM file
+ROM_FILE=$(ls -t out/target/product/${device_codename}/*.zip | head -n 1)
 
 if [[ -z "$ROM_FILE" ]]; then
     echo "Error: No ROM zip file found in out/target/product/${device_codename}"
@@ -192,6 +193,9 @@ echo "=============================================="
 
 UPLOAD_RESPONSE=$(curl -s -F "file=@$ROM_FILE" "https://store7.gofile.io/uploadFile")
 DOWNLOAD_LINK=$(echo "$UPLOAD_RESPONSE" | grep -o '"downloadPage":"[^"]*' | cut -d '"' -f4)
+
+# Print the response to debug if necessary
+echo "UPLOAD_RESPONSE: $UPLOAD_RESPONSE"
 
 if [[ -n "$DOWNLOAD_LINK" ]]; then
     echo "=============================================="
