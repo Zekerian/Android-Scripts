@@ -1,10 +1,11 @@
 #!/bin/bash
+set -euo pipefail
+
 # crave run --no-patch -- "curl https://raw.githubusercontent.com/tillua467/Android-Scripts/refs/heads/main/script.sh | bash"
 
 # ======= USER CONFIGURATION =======
 manifest_url="https://github.com/PixelOS-AOSP/manifest.git" # The rom you wanna build
 manifest_branch="fifteen" # The branch
-
 device_codename="phoenix"  # Example: miatoll, phoenix, surya
 lunch_prefix="aosp"        # Example: aosp, lineage
 device_soc="sm6150"        # Example: sm6150
@@ -34,12 +35,18 @@ repos=(
 
 # ======= DEPENDENCY CHECK =======
 echo "Checking required tools..."
-for cmd in repo git bash rm curl; do
-    if ! command -v $cmd &>/dev/null; then
+for cmd in repo git bash rm curl jq; do
+    if ! command -v "$cmd" &>/dev/null; then
         echo "Error: '$cmd' is missing. Install it before running the script."
         exit 1
     fi
 done
+
+# ======= CHECK EXTERNAL SCRIPT =======
+if [ ! -x /opt/crave/resync.sh ]; then
+    echo "Error: /opt/crave/resync.sh is missing or not executable. Install it before running the script."
+    exit 1
+fi
 
 # ======= CLEANUP =======
 echo "===================================="
@@ -75,7 +82,7 @@ for file in "${files_to_remove[@]}"; do
 done
 
 echo "===================================="
-echo "  Cleanup Done"
+echo "          Cleanup Done"
 echo "===================================="
 
 # ======= INIT & SYNC =======
@@ -95,12 +102,12 @@ if ! /opt/crave/resync.sh || ! repo sync -j$(nproc) --force-sync; then
 fi
 
 echo "=============================================="
-echo "         Sync Success"
+echo "             Sync Success"
 echo "=============================================="
 
 # ======= CLONE DEVICE TREES =======
 echo "=============================================="
-echo "       Cloning Trees..."
+echo "            Cloning Trees..."
 echo "=============================================="
 
 for entry in "${repos[@]}"; do
@@ -110,6 +117,9 @@ for entry in "${repos[@]}"; do
 
     echo "Cloning $repo_url -> $repo_path ($repo_branch)"
     git clone -b "$repo_branch" "$repo_url" "$repo_path" || { echo "Failed to clone $repo_url"; exit 1; }
+    if [ -d "$repo_path" ]; then
+        echo "Successfully cloned into $repo_path"
+    fi
 done
 
 /opt/crave/resync.sh # sync the trees
@@ -164,7 +174,21 @@ if [ "$success" = true ]; then
         echo "Build completed successfully!"
     else
         echo "Build failed! Fetching error.log..."
-        find out/target/product/${device_codename} -name "error.log" -exec cat {} \;
+        error_log=$(find out/target/product/${device_codename} -name "error.log")
+
+        if [ -f "$error_log" ]; then
+            echo "Uploading error.log to Gofile..."
+            response=$(curl -s -X POST -F "file=@$error_log" https://api.gofile.io/uploadFile)
+            download_link=$(echo "$response" | jq -r '.data.downloadPage')
+
+            if [ "$download_link" != "null" ]; then
+                echo "error.log uploaded successfully! Download it here: $download_link"
+            else
+                echo "Error uploading file. Response: $response"
+            fi
+        else
+            echo "error.log not found!"
+        fi
         exit 1
     fi
 else
@@ -192,12 +216,12 @@ echo "     Uploading ROM to Gofile.io..."
 echo "=============================================="
 
 UPLOAD_RESPONSE=$(curl -s -F "file=@$ROM_FILE" "https://store7.gofile.io/uploadFile")
-DOWNLOAD_LINK=$(echo "$UPLOAD_RESPONSE" | grep -o '"downloadPage":"[^"]*' | cut -d '"' -f4)
+DOWNLOAD_LINK=$(echo "$UPLOAD_RESPONSE" | jq -r '.data.downloadPage')
 
 # Print the response to debug if necessary
 echo "UPLOAD_RESPONSE: $UPLOAD_RESPONSE"
 
-if [[ -n "$DOWNLOAD_LINK" ]]; then
+if [[ -n "$DOWNLOAD_LINK" && "$DOWNLOAD_LINK" != "null" ]]; then
     echo "=============================================="
     echo "        Upload Successful!"
     echo "Download Link: $DOWNLOAD_LINK"
