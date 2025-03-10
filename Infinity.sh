@@ -89,9 +89,9 @@ fi
 
 echo "Manifest cloned successfully."
 
-if ! /opt/crave/resync.sh || ! repo sync -j$(nproc) --force-sync; then
-    echo "Repo sync failed. Exiting."
-    exit 1
+if ! /opt/crave/resync.sh || ! repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j$(nproc --all); then
+  echo "Repo sync failed. Exiting."
+  exit 1
 fi
 
 echo "=============================================="
