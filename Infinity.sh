@@ -1,5 +1,5 @@
 #!/bin/bash
-# crave run --no-patch -- "curl https://raw.githubusercontent.com/tillua467/Android-Scripts/refs/heads/main/script.sh | bash"
+# crave run --no-patch -- "curl https://raw.githubusercontent.com/Zekerian/Android-Scripts/refs/heads/test/Infinity.sh | bash"
 
 # ======= USER CONFIGURATION =======
 manifest_url="https://github.com/ProjectInfinity-X/manifest.git" # The rom you wanna build
