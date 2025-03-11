@@ -33,21 +33,6 @@ repos=(
     "$MIUICAMERA_DIR https://gitlab.com/Shripal17/vendor_xiaomi_miuicamera fifteen-leica"
 )
 
-# ======= DEPENDENCY CHECK =======
-echo "Checking required tools..."
-for cmd in repo git bash rm curl jq; do
-    if ! command -v "$cmd" &>/dev/null; then
-        echo "Error: '$cmd' is missing. Install it before running the script."
-        exit 1
-    fi
-done
-
-# ======= CHECK EXTERNAL SCRIPT =======
-if [ ! -x /opt/crave/resync.sh ]; then
-    echo "Error: /opt/crave/resync.sh is missing or not executable. Install it before running the script."
-    exit 1
-fi
-
 # ======= CLEANUP =======
 echo "===================================="
 echo "     Removing Unnecessary Files"
@@ -96,7 +81,7 @@ fi
 
 echo "Manifest cloned successfully."
 
-if ! /opt/crave/resync.sh || ! repo sync -j$(nproc) --force-sync; then
+if ! /opt/crave/resync.sh || ! repo sync; then
     echo "Repo sync failed. Exiting."
     exit 1
 fi
