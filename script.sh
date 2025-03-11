@@ -1,10 +1,11 @@
 #!/bin/bash
+set -euo pipefail
+
 # crave run --no-patch -- "curl https://raw.githubusercontent.com/tillua467/Android-Scripts/refs/heads/main/script.sh | bash"
 
 # ======= USER CONFIGURATION =======
 manifest_url="https://github.com/PixelOS-AOSP/manifest.git" # The rom you wanna build
 manifest_branch="fifteen" # The branch
-
 device_codename="phoenix"  # Example: miatoll, phoenix, surya
 lunch_prefix="aosp"        # Example: aosp, lineage
 device_soc="sm6150"        # Example: sm6150
@@ -26,7 +27,7 @@ repos=(
     "$DT_DIR https://github.com/tillua467/phoenix-dt pos-15"
     "$CDT_DIR https://github.com/tillua467/sm6150-common pos-15"
     "$KERNEL_DIR https://github.com/Rom-Build-sys/android_kernel_xiaomi_sm6150 lineage-22.1"
-    "$VENDOR_DIR https://github.com/tillua467/proprietary_vendor_xiaomi_phoenix lineage-22.1"
+    "$VENDOR_DIR https://github.com/tillua467/proprietary_vendor_xiaomi_phoenix los-22.1"
     "$COMMON_VENDOR_DIR https://github.com/aosp-phoenix/proprietary_vendor_xiaomi_sm6150-common lineage-22.1"
     "$HARDWARE_XIAOMI_DIR https://github.com/tillua467/android_hardware_xiaomi lineage-22.1"
     "$MIUICAMERA_DIR https://gitlab.com/Shripal17/vendor_xiaomi_miuicamera fifteen-leica"
@@ -34,12 +35,18 @@ repos=(
 
 # ======= DEPENDENCY CHECK =======
 echo "Checking required tools..."
-for cmd in repo git bash rm curl; do
-    if ! command -v $cmd &>/dev/null; then
+for cmd in repo git bash rm curl jq; do
+    if ! command -v "$cmd" &>/dev/null; then
         echo "Error: '$cmd' is missing. Install it before running the script."
         exit 1
     fi
 done
+
+# ======= CHECK EXTERNAL SCRIPT =======
+if [ ! -x /opt/crave/resync.sh ]; then
+    echo "Error: /opt/crave/resync.sh is missing or not executable. Install it before running the script."
+    exit 1
+fi
 
 # ======= CLEANUP =======
 echo "===================================="
@@ -75,7 +82,7 @@ for file in "${files_to_remove[@]}"; do
 done
 
 echo "===================================="
-echo "  Cleanup Done"
+echo "          Cleanup Done"
 echo "===================================="
 
 # ======= INIT & SYNC =======
@@ -95,12 +102,12 @@ if ! /opt/crave/resync.sh || ! repo sync -j$(nproc) --force-sync; then
 fi
 
 echo "=============================================="
-echo "         Sync Success"
+echo "             Sync Success"
 echo "=============================================="
 
 # ======= CLONE DEVICE TREES =======
 echo "=============================================="
-echo "       Cloning Trees..."
+echo "            Cloning Trees..."
 echo "=============================================="
 
 for entry in "${repos[@]}"; do
@@ -110,6 +117,9 @@ for entry in "${repos[@]}"; do
 
     echo "Cloning $repo_url -> $repo_path ($repo_branch)"
     git clone -b "$repo_branch" "$repo_url" "$repo_path" || { echo "Failed to clone $repo_url"; exit 1; }
+    if [ -d "$repo_path" ]; then
+        echo "Successfully cloned into $repo_path"
+    fi
 done
 
 /opt/crave/resync.sh # sync the trees
@@ -164,7 +174,21 @@ if [ "$success" = true ]; then
         echo "Build completed successfully!"
     else
         echo "Build failed! Fetching error.log..."
-        find out/target/product/${device_codename} -name "error.log" -exec cat {} \;
+        error_log=$(find out/target/product/${device_codename} -name "error.log")
+
+        if [ -f "$error_log" ]; then
+            echo "Uploading error.log to Gofile..."
+            response=$(curl -s -X POST -F "file=@$error_log" https://api.gofile.io/uploadFile)
+            download_link=$(echo "$response" | jq -r '.data.downloadPage')
+
+            if [ "$download_link" != "null" ]; then
+                echo "error.log uploaded successfully! Download it here: $download_link"
+            else
+                echo "Error uploading file. Response: $response"
+            fi
+        else
+            echo "error.log not found!"
+        fi
         exit 1
     fi
 else
@@ -177,7 +201,8 @@ echo "=============================================="
 echo "      Searching for the built ROM..."
 echo "=============================================="
 
-ROM_FILE=$(find out/target/product/${device_codename} -name "*.zip" -type f | sort -r | head -n 1)
+# Use `ls -t` to get the latest built ROM file
+ROM_FILE=$(ls -t out/target/product/${device_codename}/*.zip | head -n 1)
 
 if [[ -z "$ROM_FILE" ]]; then
     echo "Error: No ROM zip file found in out/target/product/${device_codename}"
@@ -191,9 +216,12 @@ echo "     Uploading ROM to Gofile.io..."
 echo "=============================================="
 
 UPLOAD_RESPONSE=$(curl -s -F "file=@$ROM_FILE" "https://store7.gofile.io/uploadFile")
-DOWNLOAD_LINK=$(echo "$UPLOAD_RESPONSE" | grep -o '"downloadPage":"[^"]*' | cut -d '"' -f4)
+DOWNLOAD_LINK=$(echo "$UPLOAD_RESPONSE" | jq -r '.data.downloadPage')
 
-if [[ -n "$DOWNLOAD_LINK" ]]; then
+# Print the response to debug if necessary
+echo "UPLOAD_RESPONSE: $UPLOAD_RESPONSE"
+
+if [[ -n "$DOWNLOAD_LINK" && "$DOWNLOAD_LINK" != "null" ]]; then
     echo "=============================================="
     echo "        Upload Successful!"
     echo "Download Link: $DOWNLOAD_LINK"
