@@ -96,5 +96,5 @@ echo "====== Envsetup Done ======="
 echo "===================================="
 echo "        Build Infinity.."
 echo "===================================="
-lunch infinity_miami-userdebug
+lunch infinity_miami-eng
 mka bacon
